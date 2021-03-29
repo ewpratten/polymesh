@@ -5,7 +5,7 @@ use libpolymesh::file::{
 };
 
 fn main() {
-    let matches = App::new("PMFPack")
+    let matches = App::new("PMFExtract")
     .author("Evan Pratten <ewpratten@gmail.com>")
     .arg(
         Arg::with_name("from")

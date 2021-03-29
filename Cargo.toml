@@ -1,2 +1,2 @@
 [workspace]
-members = ["libpolymesh", "tools/pmfpack", "tools/pmfextract"]
+members = ["libpolymesh", "tools/pmfpack", "tools/pmfextract", "tools/pmfview"]
