@@ -1,5 +1,7 @@
 # PolyMesh
 
+![Build](https://github.com/Ewpratten/polymesh/workflows/Build/badge.svg)
+
 PolyMesh is a custom 3D object description file format I designed as an experiment. The PolyMesh file format and toolset are specifically designed for 3D rendering applications.
 
 The PolyMesh file format (`pmf`) is a gzip file containing a structured directory tree of JSON files. Each level of the tree contains a descriptor `polymeta.json` file, which describes the directory. The lowest level directories all contain `mesh.json` files, which describe a 3D mesh using a collection of basic polygons. Each level of a PolyMesh file should be thought of as its own 3D mesh. Higher level meshes can include lower level meshes to build more complex meshes.
