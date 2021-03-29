@@ -1,0 +1,57 @@
+{
+    "version": 1.0,
+    "group": true,
+    "metadata": {
+        "name": "Cube"
+    },
+    "children": [
+        {
+            "path": "/faces/pos_x",
+            "transform": {
+                "x": 1.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "path": "/faces/neg_x",
+            "transform": {
+                "x": -1.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "path": "/faces/pos_y",
+            "transform": {
+                "x": 0.0,
+                "y": 1.0,
+                "z": 0.0
+            }
+        },
+        {
+            "path": "/faces/neg_y",
+            "transform": {
+                "x": 0.0,
+                "y": -1.0,
+                "z": 0.0
+            }
+        },
+        {
+            "path": "/faces/pos_z",
+            "transform": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": -1.0
+            }
+        },
+        {
+            "path": "/faces/neg_z",
+            "transform": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": -1.0
+            }
+        }
+    ]
+}

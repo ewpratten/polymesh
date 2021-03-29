@@ -1,0 +1,17 @@
+{
+    "version": 1.0,
+    "group": true,
+    "metadata": {
+        "name": "Cube"
+    },
+    "children": [
+        {
+            "path": "/faces/pos_x",
+            "transform": {
+                "x": 1.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        }
+    ]
+}
