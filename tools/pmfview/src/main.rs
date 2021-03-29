@@ -1,8 +1,11 @@
 use raylib::prelude::*;
 use clap::{App, Arg};
-use libpolymesh::file::{
-    compressed::unpack_pmf,
-    data::polymeta::parse_poly_meta
+use libpolymesh::{
+    file::{
+        compressed::unpack_pmf,
+        data::polymeta::parse_poly_meta
+    },
+    polymesh::FlatPolyMesh
 };
 use std::env;
 use raylib::ffi::KeyboardKey::KEY_W;
@@ -30,8 +33,8 @@ fn main() {
     let root_pmf_metadata = parse_poly_meta(&format!("{}/polymeta.json", unpack_output_path).to_string()).unwrap();
     let pmf_name = &root_pmf_metadata.metadata["name"];
 
-    // Parse the PMF file
-    // TODO:
+    // Parse the PMF file to a flat mesh
+    let flat_pmf_mesh = FlatPolyMesh::new(unpack_output_path);
 
     println!("Loaded PolyMesh: {}", pmf_name);
 
@@ -78,13 +81,35 @@ fn main() {
             // Graw ground plane
             d_3d.draw_grid(1000, 1.0);
 
-            // Render test cube
-            if wireframe_mode {
+            // Render every poly in the mesh
+            for mesh in &flat_pmf_mesh.flat_meshes {
+                for poly_triangle in &mesh.triangles {
+                    // Create vectors
+                    let point_1 = Vector3::new(
+                        poly_triangle[0].x,
+                        poly_triangle[0].y,
+                        poly_triangle[0].z
+                    );
+                    let point_2 = Vector3::new(
+                        poly_triangle[1].x,
+                        poly_triangle[1].y,
+                        poly_triangle[1].z
+                    );
+                    let point_3 = Vector3::new(
+                        poly_triangle[2].x,
+                        poly_triangle[2].y,
+                        poly_triangle[2].z
+                    );
 
-                d_3d.draw_cube_wires(Vector3::new(0.0, 0.0, 0.0), 1.0, 5.0, 32.0, Color::BLUE);
-            }else {
-
-                d_3d.draw_cube(Vector3::new(0.0, 0.0, 0.0), 1.0, 5.0, 32.0, Color::BLUE);
+                    // Handle rendering
+                    if wireframe_mode {
+                        d_3d.draw_line_3D(point_1, point_2, Color::RED);
+                        d_3d.draw_line_3D(point_2, point_3, Color::RED);
+                        d_3d.draw_line_3D(point_3, point_1, Color::RED);
+                    } else {
+                        d_3d.draw_triangle3D(point_1, point_2, point_3, Color::BLACK);
+                    }
+                }
             }
         }
 
