@@ -101,13 +101,21 @@ fn main() {
                         poly_triangle[2].z
                     );
 
+                    // Mesh color
+                    let color = Color{ 
+                        r: mesh.color.r,
+                        g: mesh.color.g,
+                        b: mesh.color.b,
+                        a: mesh.color.a 
+                    };
+
                     // Handle rendering
                     if wireframe_mode {
                         d_3d.draw_line_3D(point_1, point_2, Color::RED);
                         d_3d.draw_line_3D(point_2, point_3, Color::RED);
                         d_3d.draw_line_3D(point_3, point_1, Color::RED);
                     } else {
-                        d_3d.draw_triangle3D(point_1, point_2, point_3, Color::BLACK);
+                        d_3d.draw_triangle3D(point_1, point_2, point_3, color);
                     }
                 }
             }
