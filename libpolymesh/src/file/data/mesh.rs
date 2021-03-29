@@ -3,7 +3,7 @@ use serde_json::Result;
 use super::vector::PolyVec;
 use std::fs;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub struct PolyColor {
     pub r: u8,
     pub g: u8,
@@ -11,10 +11,38 @@ pub struct PolyColor {
     pub a: u8
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct PolyMesh {
     pub triangles: Vec<Vec<PolyVec>>,
     pub color: PolyColor
+}
+
+impl PolyMesh {
+
+    pub fn build_transformed(other: &PolyMesh, transform: &PolyVec) -> PolyMesh {
+
+        // Build new triangle list
+        let mut triangles = Vec::new();
+
+        for triangle in &other.triangles {
+            
+            // Build new point list
+            let mut vecs = Vec::new();
+
+            // Add transformed points
+            for vec in triangle {
+                vecs.push(*vec + *transform);
+            }
+            triangles.push(vecs);
+        }
+
+        PolyMesh {
+            triangles, 
+            color: other.color
+        }
+
+    }
+
 }
 
 pub fn mesh_from_file(file_path: &str) -> Result<PolyMesh> {

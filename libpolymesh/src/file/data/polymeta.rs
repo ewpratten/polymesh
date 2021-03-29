@@ -6,13 +6,13 @@ use std::{
     fs
 };
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct PolyChild {
     pub path: String,
     pub transform: PolyVec
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct PolyMeta {
     pub version: f32,
     pub group: bool,

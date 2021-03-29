@@ -27,7 +27,7 @@ fn main() {
     // Unpack the file to /tmp
     let unpack_output = env::temp_dir();
     let unpack_output_path = &unpack_output.display().to_string();
-    unpack_pmf(pmf_file_path, unpack_output_path);
+    let _ = unpack_pmf(pmf_file_path, unpack_output_path).unwrap();
 
     // Load the root file metadata
     let root_pmf_metadata = parse_poly_meta(&format!("{}/polymeta.json", unpack_output_path).to_string()).unwrap();
