@@ -26,7 +26,6 @@ fn recurse_collect_meshes(path: &str, meta: &PolyMeta, transform: PolyVec) -> Ve
 
         // Transform the mesh to be absolutely positioned
         let new_mesh = PolyMesh::build_transformed(&mesh, &transform);
-        println!("{:?}", new_mesh.triangles);
 
         // Build and return the output
         output.push(new_mesh);
