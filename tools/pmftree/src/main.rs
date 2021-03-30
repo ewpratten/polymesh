@@ -18,7 +18,7 @@ fn recurse_display(path: &str, level: usize) {
     let padding = std::iter::repeat(" ").take(level * 2).collect::<String>();
     let path = String::from(path);
     let mut name = path.split("/").last().unwrap().white();
-    let nice_name = mesh_meta.metadata["name"].white();
+    let nice_name = mesh_meta.name.white();
 
     // Handle root
     if level == 0 {

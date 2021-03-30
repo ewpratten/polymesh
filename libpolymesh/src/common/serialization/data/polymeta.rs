@@ -4,6 +4,8 @@ use super::super::super::{
 };
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
+use serde_json::Result;
+use std::fs;
 
 pub const LATEST_POLY_META_VERSION: f32 = 1.1;
 
@@ -35,5 +37,18 @@ pub struct PolyMeta {
 
     /// Children of the mesh
     pub children: Vec<PolyChildReference>
+
+}
+
+impl PolyMeta {
+
+    /// Read a PolyMeta object from a file
+    pub fn from_file(file_path: &str) -> Result<PolyMeta> {
+        // Read the file
+        let file_contents = fs::read_to_string(file_path).unwrap();
+        let poly_meta: PolyMeta = serde_json::from_str(&file_contents.to_string()).unwrap();
+
+        Ok(poly_meta)
+    }
 
 }
