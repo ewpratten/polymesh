@@ -1,8 +1,8 @@
 {
     "version": 1.0,
     "group": false,
+    "name": "Negative Y Face",
     "metadata": {
-        "name": "Negative Y Face"
     },
     "children": []
 }

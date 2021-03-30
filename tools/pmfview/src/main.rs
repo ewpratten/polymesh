@@ -1,3 +1,5 @@
+extern crate tempdir;
+
 use raylib::prelude::*;
 use clap::{App, Arg};
 use libpolymesh::{
@@ -7,7 +9,7 @@ use libpolymesh::{
     },
     polymesh::FlatPolyMesh
 };
-use std::env;
+use tempdir::TempDir;
 use raylib::ffi::KeyboardKey::KEY_W;
 
 fn main() {
@@ -25,8 +27,8 @@ fn main() {
     let pmf_file_path = matches.value_of("file").unwrap();
 
     // Unpack the file to /tmp
-    let unpack_output = env::temp_dir();
-    let unpack_output_path = &unpack_output.display().to_string();
+    let unpack_output = TempDir::new("pmfview").unwrap();
+    let unpack_output_path = &unpack_output.path().to_str().unwrap();
     let _ = unpack_pmf(pmf_file_path, unpack_output_path).unwrap();
 
     // Load the root file metadata

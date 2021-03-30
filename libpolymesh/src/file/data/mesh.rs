@@ -5,16 +5,26 @@ use std::fs;
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub struct PolyColor {
+
+    /// Red color channel
     pub r: u8,
+
+    /// Green color channel
     pub g: u8,
+
+    /// Blue color channel
     pub b: u8,
+
+    /// Alpha color channel
     pub a: u8
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct PolyMesh {
-    pub triangles: Vec<Vec<PolyVec>>,
-    pub color: PolyColor
+    pub triangles: Vec<[PolyVec;3]>,
+    pub color: PolyColor,
+    pub emission: Option<f32>,
+    pub albedo: Option<f32>
 }
 
 impl PolyMesh {
@@ -22,23 +32,26 @@ impl PolyMesh {
     pub fn build_transformed(other: &PolyMesh, transform: &PolyVec) -> PolyMesh {
 
         // Build new triangle list
-        let mut triangles = Vec::new();
+        let mut triangles: Vec<[PolyVec;3]> = Vec::new();
 
         for triangle in &other.triangles {
             
             // Build new point list
-            let mut vecs = Vec::new();
+            let mut vecs = [PolyVec { x:0.0, y:0.0, z:0.0 }; 3];
 
             // Add transformed points
-            for vec in triangle {
-                vecs.push(*vec + *transform);
+            for i in 0..3 {
+                vecs[i] = triangle[i] + *transform;
             }
+
             triangles.push(vecs);
         }
 
         PolyMesh {
             triangles, 
-            color: other.color
+            color: other.color,
+            emission: other.emission,
+            albedo: other.albedo
         }
 
     }

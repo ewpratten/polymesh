@@ -1,8 +1,8 @@
 {
     "version": 1.0,
     "group": true,
+    "name": "Cube",
     "metadata": {
-        "name": "Cube"
     },
     "children": [
         {

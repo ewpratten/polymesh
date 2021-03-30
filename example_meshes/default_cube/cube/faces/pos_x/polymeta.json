@@ -1,8 +1,8 @@
 {
     "version": 1.0,
     "group": false,
+    "name": "Positive X Face",
     "metadata": {
-        "name": "Positive X Face"
     },
     "children": []
 }

@@ -6,6 +6,8 @@ use std::{
     fs
 };
 
+pub const LATEST_POLYMETA_VERSION: f32 = 1.0;
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct PolyChild {
     pub path: String,
@@ -16,6 +18,7 @@ pub struct PolyChild {
 pub struct PolyMeta {
     pub version: f32,
     pub group: bool,
+    pub name: String,
     pub metadata: HashMap<String, String>,
     pub children: Vec<PolyChild>
 }

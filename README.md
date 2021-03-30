@@ -26,3 +26,7 @@ This repository provides a few CLI tools for working with PolyMeshes:
 ## The library
 
 [`libpolymesh`](libpolymesh) is available for use as its own separate Rust library, and is currently a work-in-progress.
+
+## A note on coordinates
+
+This project shouldn't actually care which coordinate system is used, but I program it using the "Y-up, right-handed" rule.

@@ -1,8 +1,7 @@
 {
     "version": 1.0,
     "group": false,
-    "metadata": {
-        "name": "Positive Z Face"
-    },
+    "name": "Positive Z Face",
+    "metadata": {},
     "children": []
 }
