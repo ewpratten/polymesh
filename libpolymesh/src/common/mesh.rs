@@ -130,10 +130,14 @@ impl PolyMesh {
 
     /// Get if this mesh is requesting the BETA "Runtime Culling" feature
     pub fn uses_runtime_culling(&self) -> bool {
-        return match self.try_get_meta_field("name") {
+        return match self.try_get_meta_field("_beta_runtime_culling") {
             Ok(result) => result == "on",
             Err(_) => false
         };
+    }
+
+    pub fn enable_runtime_culling(&mut self) {
+        self.add_metadata("_beta_runtime_culling".to_string(), "on".to_string());
     }
 
     /// Converts this mesh into a PolyMeta object that describes it

@@ -12,3 +12,7 @@ serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 derivative = "2.2.0"
 derive_more = "0.99.13"
+indicatif = { version = "0.15.0", optional = true }
+
+[features]
+progress_bars = ["indicatif"]

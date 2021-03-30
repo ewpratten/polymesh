@@ -71,6 +71,7 @@ fn main() -> Result<()> {
         // Create a model mesh
         let mut model_mesh = PolyMesh::new(MeshType::Group, None);
         model_mesh.set_name(format!("Model {}", i).to_string());
+        model_mesh.enable_runtime_culling();
 
         // A map of known voxels. This is used for storage optimization, pre-compression
         let mut known_voxels: HashMap<String, VoxelContainer> = HashMap::new();
