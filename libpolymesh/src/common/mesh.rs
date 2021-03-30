@@ -125,4 +125,9 @@ impl PolyMesh {
         };
     }
 
+    /// Check if the mesh contains geometry
+    pub fn contains_geometry(&self) -> bool {
+        return self.mesh_type == MeshType::Geometry || self.mesh_type == MeshType::GeoGroup || self.geometry.is_some();
+    }
+
 }

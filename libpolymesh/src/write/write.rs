@@ -24,7 +24,7 @@ pub fn write_unpacked_polymesh(mesh: &PolyMesh, root_path: &str) -> Result<()> {
     fs::write(meta_path, meta_json);
 
     // If there is geometry, write it too
-    if mesh.geometry.is_some() {
+    if mesh.contains_geometry() {
         let mesh_path = make_mesh_file_path(root_path);
         let mesh_json = serde_json::to_string(&mesh.geometry).unwrap();
         fs::write(mesh_path, mesh_json);

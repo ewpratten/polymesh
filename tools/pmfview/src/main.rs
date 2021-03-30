@@ -4,18 +4,14 @@ extern crate itertools;
 use raylib::prelude::*;
 use clap::{App, Arg};
 use libpolymesh::{
-    file::{
-        compressed::unpack_pmf,
-        data::{
-            polymeta::parse_poly_meta,
-            mesh::PolyMesh
-        }
+    read::{
+        unpack_pmf,
+        read_unpacked_polymesh
     },
-    polymesh::FlatPolyMesh
+    util::flatlist::get_flat_geometry
 };
 use tempdir::TempDir;
 use raylib::ffi::KeyboardKey::KEY_W;
-use indicatif::ProgressIterator;
 
 fn main() {
     let matches = App::new("PMFView")
@@ -37,15 +33,12 @@ fn main() {
     let _ = unpack_pmf(pmf_file_path, unpack_output_path).unwrap();
 
     // Load the root file metadata
-    let root_pmf_metadata = parse_poly_meta(&format!("{}/polymeta.json", unpack_output_path).to_string()).unwrap();
-    let pmf_name = &root_pmf_metadata.name;
-
-    // Parse the PMF file to a flat mesh
-    let flat_pmf_mesh = FlatPolyMesh::new(unpack_output_path);
-
+    let mesh = read_unpacked_polymesh(unpack_output_path).unwrap();
+    let pmf_name = mesh.get_name();
     println!("Loaded PolyMesh: {}", pmf_name);
 
-    let mut meshes = flat_pmf_mesh.flat_meshes;
+    // Get a flat list of all geometry that needs to be rendered
+    let flat_geometry = get_flat_geometry(mesh);
 
     // Set up GUI
     let (mut rl, thread) = raylib::init()
@@ -91,48 +84,50 @@ fn main() {
             d_3d.draw_grid(100, 1.0);
 
             // Render every poly in the mesh
-            for (i, mesh) in meshes.iter().enumerate() {
+            for (i, mesh) in flat_geometry.iter().enumerate() {
 
                 // Skip any invisible meshes
                 if mesh.color.a == 0 {
                     continue;
                 }
+                
+                if mesh.triangles.is_some(){
+                    for poly_triangle in mesh.triangles.as_ref().unwrap() {
 
-                for poly_triangle in &mesh.triangles {
+                        // Create vectors
+                        let point_1 = Vector3::new(
+                            poly_triangle[0].x,
+                            poly_triangle[0].y,
+                            poly_triangle[0].z
+                        );
+                        let point_2 = Vector3::new(
+                            poly_triangle[1].x,
+                            poly_triangle[1].y,
+                            poly_triangle[1].z
+                        );
+                        let point_3 = Vector3::new(
+                            poly_triangle[2].x,
+                            poly_triangle[2].y,
+                            poly_triangle[2].z
+                        );
 
-                    // Create vectors
-                    let point_1 = Vector3::new(
-                        poly_triangle[0].x,
-                        poly_triangle[0].y,
-                        poly_triangle[0].z
-                    );
-                    let point_2 = Vector3::new(
-                        poly_triangle[1].x,
-                        poly_triangle[1].y,
-                        poly_triangle[1].z
-                    );
-                    let point_3 = Vector3::new(
-                        poly_triangle[2].x,
-                        poly_triangle[2].y,
-                        poly_triangle[2].z
-                    );
+                        // Mesh color
+                        let color = Color{ 
+                            r: mesh.color.r,
+                            g: mesh.color.g,
+                            b: mesh.color.b,
+                            a: 255
+                            // a: mesh.color.a 
+                        };
 
-                    // Mesh color
-                    let color = Color{ 
-                        r: mesh.color.r,
-                        g: mesh.color.g,
-                        b: mesh.color.b,
-                        a: 255
-                        // a: mesh.color.a 
-                    };
-
-                    // Handle rendering
-                    if wireframe_mode {
-                        d_3d.draw_line_3D(point_1, point_2, Color::RED);
-                        d_3d.draw_line_3D(point_2, point_3, Color::RED);
-                        d_3d.draw_line_3D(point_3, point_1, Color::RED);
-                    } else {
-                        d_3d.draw_triangle3D(point_1, point_2, point_3, color);
+                        // Handle rendering
+                        if wireframe_mode {
+                            d_3d.draw_line_3D(point_1, point_2, Color::RED);
+                            d_3d.draw_line_3D(point_2, point_3, Color::RED);
+                            d_3d.draw_line_3D(point_3, point_1, Color::RED);
+                        } else {
+                            d_3d.draw_triangle3D(point_1, point_2, point_3, color);
+                        }
                     }
                 }
             }
