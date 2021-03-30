@@ -31,7 +31,7 @@ pub fn create_aabb(width: f32, height: f32, color: PolyColor, emission: Option<f
         metadata: HashMap::new(),
         children: vec![
             PolyChild {
-                path: "/positive_x_face_geo".to_string(),
+                path: "/faces/positive_x_face_geo".to_string(),
                 transform: PolyVec {
                     x: width / 2.0,
                     y: 0.0,
@@ -39,7 +39,7 @@ pub fn create_aabb(width: f32, height: f32, color: PolyColor, emission: Option<f
                 }
             },
             PolyChild {
-                path: "/positive_y_face_geo".to_string(),
+                path: "/faces/positive_y_face_geo".to_string(),
                 transform: PolyVec {
                     x: 0.0,
                     y: height / 2.0,
@@ -47,7 +47,7 @@ pub fn create_aabb(width: f32, height: f32, color: PolyColor, emission: Option<f
                 }
             },
             PolyChild {
-                path: "/positive_z_face_geo".to_string(),
+                path: "/faces/positive_z_face_geo".to_string(),
                 transform: PolyVec {
                     x: 0.0,
                     y: 0.0,
@@ -55,7 +55,7 @@ pub fn create_aabb(width: f32, height: f32, color: PolyColor, emission: Option<f
                 }
             },
             PolyChild {
-                path: "/negative_x_face_geo".to_string(),
+                path: "/faces/negative_x_face_geo".to_string(),
                 transform: PolyVec {
                     x: -(width / 2.0),
                     y: 0.0,
@@ -63,7 +63,7 @@ pub fn create_aabb(width: f32, height: f32, color: PolyColor, emission: Option<f
                 }
             },
             PolyChild {
-                path: "/negative_y_face_geo".to_string(),
+                path: "/faces/negative_y_face_geo".to_string(),
                 transform: PolyVec {
                     x: 0.0,
                     y: -(height / 2.0),
@@ -71,7 +71,7 @@ pub fn create_aabb(width: f32, height: f32, color: PolyColor, emission: Option<f
                 }
             },
             PolyChild {
-                path: "/negative_z_face_geo".to_string(),
+                path: "/faces/negative_z_face_geo".to_string(),
                 transform: PolyVec {
                     x: 0.0,
                     y: 0.0,
@@ -85,14 +85,10 @@ pub fn create_aabb(width: f32, height: f32, color: PolyColor, emission: Option<f
     let root_meta_json = serde_json::to_string(&root_meta).unwrap();
     fs::write(&format!("{}/polymeta.json", root_dir).to_string(), root_meta_json);
 
-    // Create directories and meta for each face
-    let geo_root_dir = &format!("{}/faces", root_dir).to_string();
-    let _ = fs::create_dir_all(geo_root_dir).unwrap();
-
     for child in &root_meta.children {
 
         // Create output root
-        let child_root = &format!("{}{}", geo_root_dir, child.path).to_string();
+        let child_root = &format!("{}{}", root_dir, child.path).to_string();
 
         // Init directory
         let _ = fs::create_dir_all(child_root).unwrap();

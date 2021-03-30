@@ -33,7 +33,7 @@ fn main() {
 
     // Load the root file metadata
     let root_pmf_metadata = parse_poly_meta(&format!("{}/polymeta.json", unpack_output_path).to_string()).unwrap();
-    let pmf_name = &root_pmf_metadata.metadata["name"];
+    let pmf_name = &root_pmf_metadata.name;
 
     // Parse the PMF file to a flat mesh
     let flat_pmf_mesh = FlatPolyMesh::new(unpack_output_path);

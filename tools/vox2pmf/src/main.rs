@@ -22,6 +22,11 @@ use libpolymesh::file::{
 use tempdir::TempDir;
 use serde_json::Result;
 use hex::FromHex;
+use indicatif::{
+    ProgressIterator,
+    ProgressBar,
+    ProgressStyle
+};
 
 fn main() -> Result<()> {
     let matches = App::new("VOX2PMF")
@@ -80,6 +85,7 @@ fn main() -> Result<()> {
     let root_meta_json = serde_json::to_string(&root_meta).unwrap();
     let _ = fs::write(&format!("{}/polymeta.json", temp_output_dir_path).to_string(), root_meta_json).unwrap();
 
+
     // Construct every child
     for (i, child) in root_meta.children.iter().enumerate() {
 
@@ -90,37 +96,51 @@ fn main() -> Result<()> {
         // List of voxels as children
         let mut voxel_children = Vec::new();
 
+        // A map of known voxels. This is used for storage optimization, pre-compression
+        let mut known_voxels: HashMap<String, usize> = HashMap::new();
+
         // We handle the child's children first to keep the code a little simpler
-        for (i, voxel) in vox_data.models[i].voxels.iter().enumerate() {
+        for (i, voxel) in vox_data.models[i].voxels.iter().enumerate().progress() {
 
             // Get the voxel's material and color
             let material = &vox_data.materials[voxel.i as usize];
             let color = &vox_data.palette[voxel.i as usize];
 
-            // Convert color to a hex string
-            let color = format!("{:x}", color);
-            
-            // Convert hex to components
-            let color_components = <[u8; 4]>::from_hex(color).unwrap();
-            let color = PolyColor {
-                r: color_components[0],
-                g: color_components[1],
-                b: color_components[2],
-                a: color_components[3],
-            };
+            // Build a descriptor string for this voxel
+            let descriptor = format!("{:?}-{}", material.properties, color);            
 
-            // Get material properties
-            // TODO
-            let emission = 0.0;
-            let albedo = 0.0;
+            // If this descriptor does not exist, create it, and create the voxel
+            let mut voxel_rel_path;
+            if !known_voxels.contains_key(&descriptor) {
+                known_voxels.insert(descriptor, i);
 
-            // Create a directory for this voxel
-            let voxel_rel_path = format!("/voxel_{}_gr", i).to_string();
-            let voxel_dir = &format!("{}{}", child_dir, voxel_rel_path).to_string();
-            let _ = fs::create_dir_all(voxel_dir).unwrap();
+                // Convert color to a hex string
+                let color = format!("{:x}", color);
+                
+                // Convert hex to components
+                let color_components = <[u8; 4]>::from_hex(color).unwrap();
+                let color = PolyColor {
+                    r: color_components[0],
+                    g: color_components[1],
+                    b: color_components[2],
+                    a: color_components[3],
+                };
 
-            // Write the voxel
-            create_aabb(0.5, 0.5, color, Some(emission), Some(albedo), voxel_dir);
+                // Get material properties
+                // TODO
+                let emission = 0.0;
+                let albedo = 0.0;
+
+                // Create a directory for this voxel
+                voxel_rel_path = format!("/voxel_{}_gr", i).to_string();
+                let voxel_dir = &format!("{}{}", child_dir, voxel_rel_path).to_string();
+                let _ = fs::create_dir_all(voxel_dir).unwrap();
+
+                // Write the voxel
+                create_aabb(0.5, 0.5, color, Some(emission), Some(albedo), voxel_dir);
+            } else {
+                voxel_rel_path = format!("/voxel_{}_gr", known_voxels[&descriptor]).to_string();
+            }
 
             // Create a PolyChild for the model to hold
             voxel_children.push(PolyChild {
@@ -149,7 +169,8 @@ fn main() -> Result<()> {
     }
 
     // Pack the pmf file
-    pack_pmf(temp_output_dir_path, pmf_file_path);
+    println!("Compressing");
+    let _ = pack_pmf(temp_output_dir_path, pmf_file_path).unwrap();
 
     println!("Done!");
 
