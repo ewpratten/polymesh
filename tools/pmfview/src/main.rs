@@ -1,16 +1,21 @@
 extern crate tempdir;
+extern crate itertools;
 
 use raylib::prelude::*;
 use clap::{App, Arg};
 use libpolymesh::{
     file::{
         compressed::unpack_pmf,
-        data::polymeta::parse_poly_meta
+        data::{
+            polymeta::parse_poly_meta,
+            mesh::PolyMesh
+        }
     },
     polymesh::FlatPolyMesh
 };
 use tempdir::TempDir;
 use raylib::ffi::KeyboardKey::KEY_W;
+use indicatif::ProgressIterator;
 
 fn main() {
     let matches = App::new("PMFView")
@@ -39,6 +44,18 @@ fn main() {
     let flat_pmf_mesh = FlatPolyMesh::new(unpack_output_path);
 
     println!("Loaded PolyMesh: {}", pmf_name);
+
+    // Pre-cull all meshes
+    // println!("Pre-culling meshes...");
+    // let mut meshes: Vec<&PolyMesh> = Vec::new();
+    // for (i, mesh) in flat_pmf_mesh.flat_meshes.iter().enumerate().progress() {
+    //     for search_mesh in &flat_pmf_mesh.flat_meshes{
+    //         if mesh.triangles.iter().zip(search_mesh.triangles.iter()).filter(|&(a, b)| a != b).count() == 0 {
+    //             meshes.push(mesh);
+    //         }
+    //     }
+    // }
+    let mut meshes = flat_pmf_mesh.flat_meshes;
 
     // Set up GUI
     let (mut rl, thread) = raylib::init()
@@ -81,11 +98,18 @@ fn main() {
             let mut d_3d = d.begin_mode3D(camera);
 
             // Graw ground plane
-            d_3d.draw_grid(1000, 1.0);
+            d_3d.draw_grid(100, 1.0);
 
             // Render every poly in the mesh
-            for mesh in &flat_pmf_mesh.flat_meshes {
+            for (i, mesh) in meshes.iter().enumerate() {
+
+                // Skip any invisible meshes
+                if mesh.color.a == 0 {
+                    continue;
+                }
+
                 for poly_triangle in &mesh.triangles {
+
                     // Create vectors
                     let point_1 = Vector3::new(
                         poly_triangle[0].x,
@@ -108,7 +132,8 @@ fn main() {
                         r: mesh.color.r,
                         g: mesh.color.g,
                         b: mesh.color.b,
-                        a: mesh.color.a 
+                        a: 255
+                        // a: mesh.color.a 
                     };
 
                     // Handle rendering
@@ -124,8 +149,9 @@ fn main() {
         }
 
         // Render help text
-        d.draw_text("Navigation: (ALT +) Middle click", 12, 12, 20, Color::BLACK);
+        d.draw_text("Navigation: (ALT +) Middle click", 12, 10, 20, Color::BLACK);
         d.draw_text("Toggle wireframe: W", 12, 30, 20, Color::BLACK);
+        d.draw_fps(12, 50);
     }
 
 }

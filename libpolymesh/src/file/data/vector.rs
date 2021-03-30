@@ -1,10 +1,15 @@
 use serde::{Deserialize, Serialize};
 use std::ops::Add;
+use derivative::Derivative;
 
-#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, Derivative, PartialOrd)]
+#[derivative(Hash)]
 pub struct PolyVec {
+    #[derivative(Hash="ignore")]
     pub x: f32,
+    #[derivative(Hash="ignore")]
     pub y: f32,
+    #[derivative(Hash="ignore")]
     pub z: f32
 }
 

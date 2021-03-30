@@ -2,8 +2,9 @@ use serde::{Deserialize, Serialize};
 use serde_json::Result;
 use super::vector::PolyVec;
 use std::fs;
+use derivative::Derivative;
 
-#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, Hash)]
 pub struct PolyColor {
 
     /// Red color channel
@@ -19,11 +20,16 @@ pub struct PolyColor {
     pub a: u8
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Derivative)]
+#[derivative( Hash)]
 pub struct PolyMesh {
     pub triangles: Vec<[PolyVec;3]>,
     pub color: PolyColor,
+
+    #[derivative(Hash="ignore")]
     pub emission: Option<f32>,
+
+    #[derivative(Hash="ignore")]
     pub albedo: Option<f32>
 }
 

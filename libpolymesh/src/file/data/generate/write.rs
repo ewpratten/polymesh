@@ -33,7 +33,7 @@ pub fn create_aabb(width: f32, height: f32, color: PolyColor, emission: Option<f
             PolyChild {
                 path: "/faces/positive_x_face_geo".to_string(),
                 transform: PolyVec {
-                    x: width / 2.0,
+                    x: width,
                     y: 0.0,
                     z: 0.0
                 }
@@ -42,7 +42,7 @@ pub fn create_aabb(width: f32, height: f32, color: PolyColor, emission: Option<f
                 path: "/faces/positive_y_face_geo".to_string(),
                 transform: PolyVec {
                     x: 0.0,
-                    y: height / 2.0,
+                    y: height,
                     z: 0.0
                 }
             },
@@ -51,13 +51,13 @@ pub fn create_aabb(width: f32, height: f32, color: PolyColor, emission: Option<f
                 transform: PolyVec {
                     x: 0.0,
                     y: 0.0,
-                    z: width / 2.0
+                    z: width
                 }
             },
             PolyChild {
                 path: "/faces/negative_x_face_geo".to_string(),
                 transform: PolyVec {
-                    x: -(width / 2.0),
+                    x: -(width),
                     y: 0.0,
                     z: 0.0
                 }
@@ -66,7 +66,7 @@ pub fn create_aabb(width: f32, height: f32, color: PolyColor, emission: Option<f
                 path: "/faces/negative_y_face_geo".to_string(),
                 transform: PolyVec {
                     x: 0.0,
-                    y: -(height / 2.0),
+                    y: -(height),
                     z: 0.0
                 }
             },
@@ -75,7 +75,7 @@ pub fn create_aabb(width: f32, height: f32, color: PolyColor, emission: Option<f
                 transform: PolyVec {
                     x: 0.0,
                     y: 0.0,
-                    z: -(width / 2.0)
+                    z: -(width)
                 }
             }
         ]

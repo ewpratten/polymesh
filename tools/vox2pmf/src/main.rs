@@ -120,11 +120,16 @@ fn main() -> Result<()> {
                 // Convert hex to components
                 let color_components = <[u8; 4]>::from_hex(color).unwrap();
                 let color = PolyColor {
-                    r: color_components[0],
+                    r: color_components[2],
                     g: color_components[1],
-                    b: color_components[2],
+                    b: color_components[0],
                     a: color_components[3],
                 };
+
+                // Skip this voxel if it is transparent
+                if color.a == 0 {
+                    continue;
+                }
 
                 // Get material properties
                 // TODO
