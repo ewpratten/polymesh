@@ -10,4 +10,5 @@ Cargo.lock
 **/*.rs.bk
 
 # Test PMF files
-*.pmf
+./test.pmf
+*.tar.gz

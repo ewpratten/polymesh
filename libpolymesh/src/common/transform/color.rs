@@ -1,18 +1,15 @@
+extern crate derive_more;
+
 use serde::{Deserialize, Serialize};
-use std::{
-    ops::{
-        Add,
-        Sub
-    },
-    cmp::{
-        min,
-        max
-    }
+use std::cmp::{
+    min,
+    max
 };
+use derive_more::{Add, Sub, Mul, Div};
 
 
 /// Simple, JSON-Serializable color
-#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, PartialOrd)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, PartialOrd, Add, Sub, Mul, Div)]
 pub struct PolyColor {
     pub r: u8,
     pub g: u8,
@@ -73,34 +70,6 @@ impl PolyColor {
             g: 0,
             b: 0,
             a: 0,
-        }
-    }
-
-}
-
-impl Add for PolyColor {
-    type Output = Self;
-
-    fn add(self, other: Self) -> Self {
-        Self {
-            r: min(self.r + other.r, 255),
-            g: min(self.g + other.g, 255),
-            b: min(self.b + other.b, 255),
-            a: min(self.a + other.a, 255),
-        }
-    }
-
-}
-
-impl Sub for PolyColor {
-    type Output = Self;
-
-    fn sub(self, other: Self) -> Self {
-        Self {
-            r: max(self.r - other.r, 0),
-            g: max(self.g - other.g, 0),
-            b: max(self.b - other.b, 0),
-            a: max(self.a - other.a, 0),
         }
     }
 

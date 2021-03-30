@@ -88,6 +88,11 @@ impl PolyMesh {
         return self.try_get_meta_field("name");
     }
 
+    /// Set the mesh name
+    pub fn set_name(&mut self, name: String) {
+        self.metadata.insert("name".to_string(), name);
+    }
+
     /// Get if this mesh is requesting the BETA "Runtime Culling" feature
     pub fn uses_runtime_culling(&self) -> bool {
         return match self.try_get_meta_field("name") {

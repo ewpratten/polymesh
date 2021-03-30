@@ -1,8 +1,10 @@
-use serde::{Deserialize, Serialize};
-use std::ops::Add;
-use derivative::Derivative;
+extern crate derive_more;
 
-#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, Derivative, PartialOrd)]
+use serde::{Deserialize, Serialize};
+use derivative::Derivative;
+use derive_more::{Add, Sub, Mul, Div};
+
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, Derivative, PartialOrd, Add, Sub, Mul, Div)]
 #[derivative(Hash)]
 pub struct PolyVec {
     #[derivative(Hash="ignore")]
@@ -20,19 +22,6 @@ impl PolyVec {
             x: 0.0,
             y: 0.0,
             z: 0.0
-        }
-    }
-
-}
-
-impl Add for PolyVec {
-    type Output = Self;
-
-    fn add(self, other: Self) -> Self {
-        Self {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
         }
     }
 
