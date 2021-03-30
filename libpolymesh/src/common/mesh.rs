@@ -84,8 +84,11 @@ impl PolyMesh {
     }
 
     /// Try to fetch the mesh name from metadata
-    pub fn get_name(&self) -> Result<&String, ()> {
-        return self.try_get_meta_field("name");
+    pub fn get_name(&self) -> String {
+        return match self.try_get_meta_field("name") {
+            Ok(name) => name.to_string(),
+            Err(_) => "Unnamed".to_string()
+        };
     }
 
     /// Set the mesh name

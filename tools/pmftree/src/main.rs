@@ -2,46 +2,43 @@ extern crate colored;
 extern crate tempdir;
 
 use clap::{App, Arg};
-use libpolymesh::file::{
-    compressed::unpack_pmf,
-    data::polymeta::parse_poly_meta
+use libpolymesh::{
+    read::{
+        unpack_pmf,
+        read_unpacked_polymesh
+    },
+    common::{
+        PolyMesh,
+        MeshType
+    }
 };
 use tempdir::TempDir;
 use colored::*;
 
-fn recurse_display(path: &str, level: usize) {
-
-    // Get the metadata for this submesh
-    let mesh_meta = parse_poly_meta(&format!("{}/polymeta.json", path).to_string()).unwrap();
+fn recurse_display(mesh: &PolyMesh, path: &str, level: usize) {
 
     // Build the display string
     let padding = std::iter::repeat(" ").take(level * 2).collect::<String>();
-    let path = String::from(path);
-    let mut name = path.split("/").last().unwrap().white();
-    let nice_name = mesh_meta.name.white();
+    let mut name = path.white();
+    let nice_name = mesh.get_name().white();
 
-    // Handle root
-    if level == 0 {
-        name = "/".white();
-    }
-    
-    if mesh_meta.group {
+    // Handle coloring the name based on type    
+    if mesh.mesh_type == MeshType::Group {
         name = name.blue();
-    } else {
+    } else if mesh.mesh_type == MeshType::Geometry {
         name = name.green();
+    } else {
+        name = name.red();
     }
 
     // Show entry
     println!("{} - {} [{}]", padding, name, nice_name);
 
     // Recurse every child
-    for child in &mesh_meta.children {
-
-        // Build the child's path
-        let child_path = format!("{}{}", path, child.path);
+    for child in &mesh.children {
 
         // Recurse
-        recurse_display(&child_path.to_string(), level + 1);
+        recurse_display(child.mesh.as_ref(), &child.path, level + 1);
     }
 
 }
@@ -65,6 +62,9 @@ fn main() {
     let unpack_output_path = &unpack_output.path().to_str().unwrap();
     let _ = unpack_pmf(pmf_file_path, unpack_output_path).unwrap();
 
+    // Read the pmf file
+    let root_mesh = read_unpacked_polymesh(unpack_output_path).unwrap();
+
     // Display the tree
-    recurse_display(unpack_output_path, 0);
+    recurse_display(&root_mesh, "/", 0);
 }
