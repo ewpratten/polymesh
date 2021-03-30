@@ -91,8 +91,8 @@ fn main() {
                     continue;
                 }
 
-                //TMP
-                if i > 2000 {
+                // Deal with raylib's mesh cap
+                if i > 5000 {
                     break;
                 }
                 
@@ -121,8 +121,7 @@ fn main() {
                             r: mesh.color.r,
                             g: mesh.color.g,
                             b: mesh.color.b,
-                            a: 255
-                            // a: mesh.color.a 
+                            a: mesh.color.a 
                         };
 
                         // Handle rendering
