@@ -5,6 +5,8 @@ use super::super::super::{
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
+pub const LATEST_POLY_META_VERSION: f32 = 1.1;
+
 /// A JSON reference to another object
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct PolyChildReference {

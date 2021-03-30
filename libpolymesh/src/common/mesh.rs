@@ -1,8 +1,18 @@
 use serde::{Deserialize, Serialize};
-use super::transform::PolyVector;
+use super::{
+    transform::PolyVector,
+    serialization::data::{
+        polymeta::{
+            PolyMeta,
+            PolyChildReference,
+            LATEST_POLY_META_VERSION
+        },
+        mesh::MeshDef
+    }
+};
 use std::collections::HashMap;
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Copy)]
 pub enum MeshType {
     Group,
     Geometry,
@@ -31,6 +41,9 @@ pub struct PolyMesh {
     /// The type of this mesh
     pub mesh_type: MeshType,
 
+    /// Possible geometry for this mesh
+    pub geometry: Option<MeshDef>,
+
     /// Arbitrary metadata
     pub metadata: HashMap<String, String>,
 
@@ -42,9 +55,10 @@ pub struct PolyMesh {
 impl PolyMesh {
 
     /// Create a new PolyMesh
-    pub fn new(mesh_type: MeshType) -> Self {
+    pub fn new(mesh_type: MeshType, geometry: Option<MeshDef>) -> Self {
         PolyMesh {
             mesh_type,
+            geometry,
             metadata: HashMap::new(),
             children: Vec::new()
         }
@@ -79,6 +93,27 @@ impl PolyMesh {
         return match self.try_get_meta_field("name") {
             Ok(result) => result == "on",
             Err(_) => false
+        };
+    }
+
+    /// Converts this mesh into a PolyMeta object that describes it
+    pub fn to_poly_meta(&self) -> PolyMeta {
+
+        // Collect children
+        let mut children = Vec::new();
+        for child in &self.children {
+            children.push(PolyChildReference {
+                path: (*child.path).to_string(),
+                translation: child.translation
+            })
+        }
+
+        // Build output
+        return PolyMeta {
+            version: LATEST_POLY_META_VERSION,
+            mesh_type: self.mesh_type,
+            metadata: self.metadata.clone(),
+            children: children
         };
     }
 

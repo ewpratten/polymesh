@@ -97,10 +97,10 @@ impl Sub for PolyColor {
 
     fn sub(self, other: Self) -> Self {
         Self {
-            r: min(self.r - other.r, 255),
-            g: min(self.g - other.g, 255),
-            b: min(self.b - other.b, 255),
-            a: min(self.a - other.a, 255),
+            r: max(self.r - other.r, 0),
+            g: max(self.g - other.g, 0),
+            b: max(self.b - other.b, 0),
+            a: max(self.a - other.a, 0),
         }
     }
 
