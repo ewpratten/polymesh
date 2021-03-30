@@ -26,72 +26,80 @@ pub fn make_hexahedron(corner_a: PolyVector, corner_b: PolyVector, color: PolyCo
     let xz_max_corner = PolyVector { x: all_max_corner.x, y: all_min_corner.y, z: all_max_corner.z };
     let yz_max_corner = PolyVector { x: all_min_corner.x, y: all_max_corner.y, z: all_max_corner.z };
 
+    // Define transformation vectors
+    let positive_x_transform = PolyVector { x: all_max_corner.x, y: 0.0, z: 0.0 };
+    let positive_y_transform = PolyVector { x: 0.0, y: all_max_corner.y, z: 0.0 };
+    let positive_z_transform = PolyVector { x: 0.0, y: 0.0, z: all_max_corner.y };
+    let negative_x_transform = PolyVector { x: all_min_corner.x, y: 0.0, z: 0.0 };
+    let negative_y_transform = PolyVector { x: 0.0, y: all_min_corner.y, z: 0.0 };
+    let negative_z_transform = PolyVector { x: 0.0, y: 0.0, z: all_min_corner.y };
+
     // Construct child faces
     parent.add_child(TransPolyMeshPtr {
         path: "/faces_gr/positive_x_geo".to_string(),
         mesh: Box::new(make_quad(
-            all_max_corner - PolyVector::unit_x(),
-            xy_max_corner - PolyVector::unit_x(),
-            xz_max_corner - PolyVector::unit_x(),
-            x_max_corner - PolyVector::unit_x(),
+            all_max_corner - positive_x_transform,
+            xy_max_corner - positive_x_transform,
+            xz_max_corner - positive_x_transform,
+            x_max_corner - positive_x_transform,
             color
         )),
-        translation: Some(all_max_corner)
+        translation: Some(positive_x_transform)
     });
     parent.add_child(TransPolyMeshPtr {
         path: "/faces_gr/positive_y_geo".to_string(),
         mesh: Box::new(make_quad(
-            y_max_corner - PolyVector::unit_y(),
-            xy_max_corner - PolyVector::unit_y(),
-            yz_max_corner - PolyVector::unit_y(),
-            all_max_corner - PolyVector::unit_y(),
+            y_max_corner - positive_y_transform,
+            xy_max_corner - positive_y_transform,
+            yz_max_corner - positive_y_transform,
+            all_max_corner - positive_y_transform,
             color
         )),
-        translation: Some(all_max_corner)
+        translation: Some(positive_y_transform)
     });
     parent.add_child(TransPolyMeshPtr {
         path: "/faces_gr/positive_z_geo".to_string(),
         mesh: Box::new(make_quad(
-            yz_max_corner - PolyVector::unit_z(),
-            all_max_corner - PolyVector::unit_z(),
-            z_max_corner - PolyVector::unit_z(),
-            xz_max_corner - PolyVector::unit_z(),
+            yz_max_corner - positive_z_transform,
+            all_max_corner - positive_z_transform,
+            z_max_corner - positive_z_transform,
+            xz_max_corner - positive_z_transform,
             color
         )),
-        translation: Some(all_max_corner)
+        translation: Some(positive_z_transform)
     });
     parent.add_child(TransPolyMeshPtr {
         path: "/faces_gr/negative_x_geo".to_string(),
         mesh: Box::new(make_quad(
-            y_max_corner + PolyVector::unit_x(),
-            yz_max_corner + PolyVector::unit_x(),
-            all_min_corner + PolyVector::unit_x(),
-            z_max_corner + PolyVector::unit_x(),
+            y_max_corner - negative_x_transform,
+            yz_max_corner - negative_x_transform,
+            all_min_corner - negative_x_transform,
+            z_max_corner - negative_x_transform,
             color
         )),
-        translation: Some(all_max_corner)
+        translation: Some(negative_x_transform)
     });
     parent.add_child(TransPolyMeshPtr {
         path: "/faces_gr/negative_y_geo".to_string(),
         mesh: Box::new(make_quad(
-            z_max_corner + PolyVector::unit_y(),
-            xz_max_corner + PolyVector::unit_y(),
-            all_min_corner + PolyVector::unit_y(),
-            x_max_corner + PolyVector::unit_y(),
+            z_max_corner - negative_y_transform,
+            xz_max_corner - negative_y_transform,
+            all_min_corner - negative_y_transform,
+            x_max_corner - negative_y_transform,
             color
         )),
-        translation: Some(all_max_corner)
+        translation: Some(negative_y_transform)
     });
     parent.add_child(TransPolyMeshPtr {
         path: "/faces_gr/negative_z_geo".to_string(),
         mesh: Box::new(make_quad(
-            xy_max_corner + PolyVector::unit_z(),
-            y_max_corner + PolyVector::unit_z(),
-            x_max_corner + PolyVector::unit_z(),
-            all_min_corner + PolyVector::unit_z(),
+            xy_max_corner - negative_z_transform,
+            y_max_corner - negative_z_transform,
+            x_max_corner - negative_z_transform,
+            all_min_corner - negative_z_transform,
             color
         )),
-        translation: Some(all_max_corner)
+        translation: Some(negative_z_transform)
     });
 
     return parent;
