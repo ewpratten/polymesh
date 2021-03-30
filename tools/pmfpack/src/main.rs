@@ -1,8 +1,5 @@
 use clap::{App, Arg};
-use libpolymesh::file::{
-    extracted::pack_pmf,
-    data::polymeta::parse_poly_meta
-};
+use libpolymesh::write::pack_pmf;
 
 fn main() {
     let matches = App::new("PMFPack")
@@ -25,14 +22,9 @@ fn main() {
     let root_path = matches.value_of("from").unwrap();
     let output_path = matches.value_of("to").unwrap();
 
-    // Ensure there is a ploymeta inside the root
-    let polymeta = parse_poly_meta(&format!("{}/polymeta.json", root_path).to_string()).unwrap();
-
-    // Log file information
-    println!("PMF version: {}", polymeta.version);
-    println!("Children: {}", polymeta.children.len());
-
     // Pack the file
+    println!("Packing PolyMesh...");
     let _ = pack_pmf(root_path, output_path).unwrap();
+    println!("Done");
 
 }

@@ -1,8 +1,5 @@
 use clap::{App, Arg};
-use libpolymesh::file::{
-    compressed::unpack_pmf,
-    data::polymeta::parse_poly_meta
-};
+use libpolymesh::read::unpack_pmf;
 
 fn main() {
     let matches = App::new("PMFExtract")
@@ -26,13 +23,8 @@ fn main() {
     let output_path = matches.value_of("to").unwrap();
 
     // Unpack the file
+    println!("Unpacking PolyMesh...");
     let _ = unpack_pmf(root_path, output_path).unwrap();
-
-    // Ensure there is a ploymeta inside the root
-    let polymeta = parse_poly_meta(&format!("{}/polymeta.json", output_path).to_string()).unwrap();
-
-    // Log file information
-    println!("PMF version: {}", polymeta.version);
-    println!("Children: {}", polymeta.children.len());
+    println!("Done");
 
 }
