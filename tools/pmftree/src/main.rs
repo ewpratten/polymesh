@@ -15,7 +15,15 @@ use libpolymesh::{
 use tempdir::TempDir;
 use colored::*;
 
-fn recurse_display(mesh: &PolyMesh, path: &str, level: usize) {
+fn recurse_display(mesh: &PolyMesh, path: &str, level: usize, unique_only: bool, seen_meshes: &mut Vec<String>) {
+
+    // Skip non-unique meshes if needed
+    if unique_only {
+        if seen_meshes.contains(&path.to_string()) && mesh.mesh_type != MeshType::Geometry {
+            return;
+        }
+        seen_meshes.push(path.to_string());
+    }
 
     // Build the display string
     let padding = std::iter::repeat(" ").take(level * 2).collect::<String>();
@@ -38,7 +46,7 @@ fn recurse_display(mesh: &PolyMesh, path: &str, level: usize) {
     for child in &mesh.children {
 
         // Recurse
-        recurse_display(child.mesh.as_ref(), &child.path, level + 1);
+        recurse_display(child.mesh.as_ref(), &child.path, level + 1, unique_only, seen_meshes);
     }
 
 }
@@ -53,9 +61,17 @@ fn main() {
             .help("PMF file")
             .required(true)
     )
+    .arg(
+        Arg::with_name("unique")
+            .long("unique")
+            .short("u")
+            .takes_value(false)
+            .help("Only Show unique meshes")
+    )
     .get_matches();
 
     let pmf_file_path = matches.value_of("file").unwrap();
+    let unique_only: bool = matches.is_present("unique");
 
     // Unpack the file to /tmp
     let unpack_output = TempDir::new("pmftree").unwrap();
@@ -65,6 +81,9 @@ fn main() {
     // Read the pmf file
     let root_mesh = read_unpacked_polymesh(unpack_output_path).unwrap();
 
+    // A list of already seen meshes for uniqueness check
+    let mut seen_meshes = Vec::new();
+
     // Display the tree
-    recurse_display(&root_mesh, "/", 0);
+    recurse_display(&root_mesh, "/", 0, unique_only, &mut seen_meshes);
 }

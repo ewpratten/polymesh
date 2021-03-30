@@ -12,6 +12,16 @@ use serde_json::Result;
 /// Write a PolyMesh to a root directory in "unpacked" mode
 pub fn write_unpacked_polymesh(mesh: &PolyMesh, root_path: &str) -> Result<()> {
 
+    // Create a list to keep track of already written meshes (this prevents infinite write lock)
+    let mut written_children = Vec::new();
+
+    // Handle writing
+    return write_unpacked_polymesh_recursive(mesh, root_path, &mut written_children);
+
+}
+
+fn write_unpacked_polymesh_recursive(mesh: &PolyMesh, root_path: &str, written_children: &mut Vec<String>) -> Result<()> {
+
     // Ensure the root path exists
     let _ = fs::create_dir_all(root_path).unwrap();
 
@@ -32,7 +42,17 @@ pub fn write_unpacked_polymesh(mesh: &PolyMesh, root_path: &str) -> Result<()> {
 
     // Write every child
     for child in &mesh.children {
-        let _ = write_unpacked_polymesh(child.mesh.as_ref(), &make_child_file_path(root_path, &child.path)).unwrap();
+
+        // Get the child's file path 
+        let child_path = make_child_file_path(root_path, &child.path);
+
+        // If this child has not been written, write it
+        if !written_children.contains(&child_path) {
+            let _ = write_unpacked_polymesh_recursive(child.mesh.as_ref(), &child_path, written_children).unwrap();
+
+            // Track the child to prevent overwrite
+            written_children.push(child_path);
+        }
     }
 
     Ok(())

@@ -34,6 +34,38 @@ pub struct TransPolyMeshPtr {
 
 }
 
+impl TransPolyMeshPtr {
+
+    pub fn get_translation(&self) -> PolyVector {
+        match self.translation {
+            Some(x) => x,
+            None => PolyVector::zero()
+        }
+    }
+
+    pub fn new_from_transform_optional(&self, other: Option<&TransPolyMeshPtr>) -> Self {
+        match other {
+            Some(val) => self.new_from_transform(val),
+            None => self.clone()
+        }
+    }
+
+    pub fn new_from_transform(&self, other: &TransPolyMeshPtr) -> Self {
+        
+        // Get both translations
+        let this_translation = self.get_translation();
+        let other_translation = other.get_translation();
+
+        // Create a new TransPolyMeshPtr
+        Self {
+            path: self.path.to_string(),
+            mesh: self.mesh.clone(),
+            translation: Some(this_translation + other_translation)
+        }
+    }
+
+}
+
 /// A PolyMesh is any mesh, weather it contains geometry, other meshes, or a mix of both
 #[derive(Debug, Clone, PartialEq)]
 pub struct PolyMesh {

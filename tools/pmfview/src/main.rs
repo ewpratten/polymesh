@@ -90,6 +90,11 @@ fn main() {
                 if mesh.color.a == 0 {
                     continue;
                 }
+
+                //TMP
+                if i > 2000 {
+                    break;
+                }
                 
                 if mesh.triangles.is_some(){
                     for poly_triangle in mesh.triangles.as_ref().unwrap() {
