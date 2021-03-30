@@ -22,6 +22,10 @@ This repository provides a few CLI tools for working with PolyMeshes:
    - Provides a visualization of any `.pmf` file in a style similar to the `tree` command
  - [`pmfview`](tools/pmfview)
    - A full 3D visualizer for any `.pmf` file. Inspired by Pixar's `usdview`. Built on [raylib](https://github.com/raysan5/raylib)
+ - [`vox2pmf`](tools/vox2pmf)
+   - A tool that can convert files from the `.vox` format to a PolyMesh
+ - [`pmfcube`](tools/pmfcube)
+   - A debugging tool that will generate a colored cube at `[0,0,0]` with the size of 1 unit
 
 ## The library
 
