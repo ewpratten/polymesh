@@ -25,12 +25,10 @@ fn recurse_collect_meshes(path: &str, meta: &PolyMeta, transform: PolyVec, cache
         let file_path  = &format!("{}/mesh.json", path).to_string();
 
         // Try to save time using the cache
-        let mut mesh;
-        if cache.contains_key(file_path){
-            return output;
-        } else {
+        if !cache.contains_key(file_path){
+            
             // Parse the mesh file
-            mesh = mesh_from_file(file_path).unwrap();
+            let mesh = mesh_from_file(file_path).unwrap();
 
             // Add cache entry
             cache.insert(file_path.to_string(), mesh);

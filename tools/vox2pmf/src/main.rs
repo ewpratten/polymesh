@@ -100,7 +100,7 @@ fn main() -> Result<()> {
         let mut known_voxels: HashMap<String, usize> = HashMap::new();
 
         // We handle the child's children first to keep the code a little simpler
-        for (i, voxel) in vox_data.models[i].voxels.iter().enumerate().progress() {
+        '_conversion: for (i, voxel) in vox_data.models[i].voxels.iter().enumerate().progress() {
 
             // Get the voxel's material and color
             let material = &vox_data.materials[voxel.i as usize];
@@ -127,9 +127,10 @@ fn main() -> Result<()> {
                 };
 
                 // Skip this voxel if it is transparent
-                if color.a == 0 {
-                    continue;
-                }
+                // TODO: This is causing incorrect entries in PolyChild list below
+                // if color.a == 0 {
+                //     continue '_conversion;
+                // }
 
                 // Get material properties
                 // TODO
