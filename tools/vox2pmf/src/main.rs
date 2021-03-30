@@ -159,11 +159,13 @@ fn main() -> Result<()> {
         }
 
         // Build a polymeta for the child
+        let mut child_meta_meta = HashMap::new();
+        child_meta_meta.insert("_beta_runtime_culling".to_string(), "on".to_string());
         let child_meta = PolyMeta {
             version: LATEST_POLYMETA_VERSION,
             group: true,
             name: format!("VOX Model {}", i).to_string(),
-            metadata: HashMap::new(),
+            metadata: child_meta_meta,
             children: voxel_children
         };
 

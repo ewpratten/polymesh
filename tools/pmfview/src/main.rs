@@ -45,16 +45,6 @@ fn main() {
 
     println!("Loaded PolyMesh: {}", pmf_name);
 
-    // Pre-cull all meshes
-    // println!("Pre-culling meshes...");
-    // let mut meshes: Vec<&PolyMesh> = Vec::new();
-    // for (i, mesh) in flat_pmf_mesh.flat_meshes.iter().enumerate().progress() {
-    //     for search_mesh in &flat_pmf_mesh.flat_meshes{
-    //         if mesh.triangles.iter().zip(search_mesh.triangles.iter()).filter(|&(a, b)| a != b).count() == 0 {
-    //             meshes.push(mesh);
-    //         }
-    //     }
-    // }
     let mut meshes = flat_pmf_mesh.flat_meshes;
 
     // Set up GUI
