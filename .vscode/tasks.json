@@ -10,5 +10,23 @@
             "group": "build",
             "label": "Cargo: build"
         },
+        {
+            "type": "shell",
+            "command": "cargo doc --lib",
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "build",
+            "label": "Cargo: generate documentation"
+        },
+        {
+            "type": "shell",
+            "command": "cargo test",
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "test",
+            "label": "Cargo: test"
+        },
     ]
 }

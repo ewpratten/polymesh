@@ -46,6 +46,7 @@ sudo apt install libasound2-dev mesa-common-dev libx11-dev libxrandr-dev libxi-d
 # Install the workspace wrangling tools
 cargo install cargo-token
 cargo install cargo-unleash --version 1.0.0-alpha.11
+cargo install cargo-watch https
 ```
 
 Building is done with:
