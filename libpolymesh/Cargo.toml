@@ -1,6 +1,10 @@
 [package]
 name = "libpolymesh"
-version = "0.1.0"
+version = "0.1.1"
+description = "The core PolyMesh library"
+readme = "../README.md"
+license-file = "../LICENSE"
+repository = "https://github.com/Ewpratten/polymesh"
 authors = ["Evan Pratten <ewpratten@gmail.com>"]
 edition = "2018"
 
