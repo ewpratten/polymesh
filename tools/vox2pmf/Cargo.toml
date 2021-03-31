@@ -8,7 +8,7 @@ edition = "2018"
 
 [dependencies]
 clap = "2.33.3"
-libpolymesh = { path = "../../libpolymesh" }
+libpolymesh = { path = "../../libpolymesh", version = "" }
 dot_vox = "4.1.0"
 serde_json = "1.0"
 hex = "0.4.3"
