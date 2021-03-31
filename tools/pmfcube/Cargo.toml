@@ -9,4 +9,3 @@ edition = "2018"
 [dependencies]
 clap = "2.33.3"
 libpolymesh = { path = "../../libpolymesh" }
-tempdir = "0.3.7"

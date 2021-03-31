@@ -10,4 +10,3 @@ edition = "2018"
 clap = "2.33.3"
 libpolymesh = { path = "../../libpolymesh" }
 colored = "2.0.0"
-tempdir = "0.3.7"

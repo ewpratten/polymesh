@@ -1,12 +1,7 @@
 extern crate derive_more;
 
 use serde::{Deserialize, Serialize};
-use std::cmp::{
-    min,
-    max
-};
 use derive_more::{Add, Sub, Mul, Div};
-
 
 /// Simple, JSON-Serializable color
 #[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, PartialOrd, Add, Sub, Mul, Div)]

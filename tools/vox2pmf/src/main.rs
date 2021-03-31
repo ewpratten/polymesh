@@ -1,34 +1,14 @@
-extern crate tempdir;
 extern crate hex;
 
 use clap::{App, Arg};
-use std::{
-    collections::HashMap,
-    fs
-};
-use libpolymesh::{
-    write::{
-        write_unpacked_polymesh,
-        pack_pmf
-    },
-    common::{
-        PolyMesh,
-        MeshType,
-        TransPolyMeshPtr
-    },
-    create::shapes::hexahedron::make_hexahedron,
-    common::transform::{
-        PolyVector,
-        PolyColor
-    }
-};
-use tempdir::TempDir;
+use std::collections::HashMap;
+use libpolymesh::prelude as pmf;
 use serde_json::Result;
 use hex::FromHex;
 use indicatif::ProgressIterator;
 
 struct VoxelContainer {
-    mesh: Box<PolyMesh>, 
+    mesh: Box<pmf::PolyMesh>, 
     path: String
 }
 
@@ -53,15 +33,11 @@ fn main() -> Result<()> {
     let vox_file_path = matches.value_of("from").unwrap();
     let pmf_file_path = matches.value_of("to").unwrap();
 
-   // Set up a workspace directory
-   let workspace = TempDir::new("pmfcube").unwrap();
-   let workspace_path = &workspace.path().to_str().unwrap();
-
     // Parse the vox file
     let vox_data = dot_vox::load(vox_file_path).unwrap();
 
     // Build a root polymesh
-    let mut root_mesh = PolyMesh::new(MeshType::Group, None);
+    let mut root_mesh = pmf::PolyMesh::new(pmf::MeshType::Group, None);
     root_mesh.set_name("Imported VOX".to_string());
 
     // Handle every vox model
@@ -69,7 +45,7 @@ fn main() -> Result<()> {
     for (i, model) in vox_data.models.iter().enumerate() {
 
         // Create a model mesh
-        let mut model_mesh = PolyMesh::new(MeshType::Group, None);
+        let mut model_mesh = pmf::PolyMesh::new(pmf::MeshType::Group, None);
         model_mesh.set_name(format!("Model {}", i).to_string());
         model_mesh.enable_runtime_culling();
 
@@ -92,7 +68,7 @@ fn main() -> Result<()> {
                 // Convert color to an object repr (Magica uses BGRA, I use RGBA)
                 let color = format!("{:x}", color);
                 let color_components = <[u8; 4]>::from_hex(color).unwrap();
-                let color = PolyColor {
+                let color = pmf::PolyColor {
                     r: color_components[2],
                     g: color_components[1],
                     b: color_components[0],
@@ -105,7 +81,7 @@ fn main() -> Result<()> {
                 }
 
                 // Create a cube for the voxel
-                let cube = make_hexahedron(PolyVector { x: 0.5, y: 0.5, z: 0.5 }, PolyVector { x: -0.5, y: -0.5, z: -0.5 }, color);
+                let cube = pmf::make_hexahedron(pmf::PolyVector { x: 0.5, y: 0.5, z: 0.5 }, pmf::PolyVector { x: -0.5, y: -0.5, z: -0.5 }, color);
 
                 // Save the cube
                 known_voxels.insert(descriptor.to_string(), VoxelContainer { 
@@ -116,10 +92,10 @@ fn main() -> Result<()> {
             }
 
             // Add a the voxel as a child
-            model_mesh.add_child(TransPolyMeshPtr {
+            model_mesh.add_child(pmf::TransPolyMeshPtr {
                 path: (*known_voxels[&descriptor].path).to_string(),
                 mesh: known_voxels[&descriptor].mesh.clone(),
-                translation: Some(PolyVector {
+                translation: Some(pmf::PolyVector {
                     x: voxel.x as f32,
                     y: voxel.y as f32,
                     z: voxel.z as f32,
@@ -129,7 +105,7 @@ fn main() -> Result<()> {
         }
 
         // Add the model to the root mesh
-        root_mesh.add_child(TransPolyMeshPtr {
+        root_mesh.add_child(pmf::TransPolyMeshPtr {
             path: format!("/model_{}_gr", i).to_string(),
             mesh: Box::new(model_mesh),
             translation: None // TODO: I think this needs to change??
@@ -137,13 +113,9 @@ fn main() -> Result<()> {
 
     }
 
-    // Write the cube to the workspace
-    println!("Writing data to disk...");
-    let _ = write_unpacked_polymesh(&root_mesh, workspace_path).unwrap();
-
-    // Save the workspace to a pmf file
-    println!("Packing PolyMesh...");
-    let _ = pack_pmf(workspace_path, pmf_file_path).unwrap();
+    // Write the generated mesh
+    println!("Writing PolyMesh to disk...");
+    pmf::write_pmf(&root_mesh, pmf_file_path);
 
     Ok(())
 

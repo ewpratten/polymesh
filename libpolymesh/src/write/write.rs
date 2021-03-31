@@ -31,13 +31,13 @@ fn write_unpacked_polymesh_recursive(mesh: &PolyMesh, root_path: &str, written_c
     // Write the metadata to file
     let meta_path = make_polymeta_file_path(root_path);
     let meta_json = serde_json::to_string(&metadata).unwrap();
-    fs::write(meta_path, meta_json);
+    let _ = fs::write(meta_path, meta_json).unwrap();
 
     // If there is geometry, write it too
     if mesh.contains_geometry() {
         let mesh_path = make_mesh_file_path(root_path);
         let mesh_json = serde_json::to_string(&mesh.geometry).unwrap();
-        fs::write(mesh_path, mesh_json);
+        let _ = fs::write(mesh_path, mesh_json).unwrap();
     }
 
     // Write every child

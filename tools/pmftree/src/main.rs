@@ -1,25 +1,14 @@
 extern crate colored;
-extern crate tempdir;
 
 use clap::{App, Arg};
-use libpolymesh::{
-    read::{
-        unpack_pmf,
-        read_unpacked_polymesh
-    },
-    common::{
-        PolyMesh,
-        MeshType
-    }
-};
-use tempdir::TempDir;
+use libpolymesh::prelude as pmf;
 use colored::*;
 
-fn recurse_display(mesh: &PolyMesh, path: &str, level: usize, unique_only: bool, seen_meshes: &mut Vec<String>) {
+fn recurse_display(mesh: &pmf::PolyMesh, path: &str, level: usize, unique_only: bool, seen_meshes: &mut Vec<String>) {
 
     // Skip non-unique meshes if needed
     if unique_only {
-        if seen_meshes.contains(&path.to_string()) && mesh.mesh_type != MeshType::Geometry {
+        if seen_meshes.contains(&path.to_string()) && mesh.mesh_type != pmf::MeshType::Geometry {
             return;
         }
         seen_meshes.push(path.to_string());
@@ -31,9 +20,9 @@ fn recurse_display(mesh: &PolyMesh, path: &str, level: usize, unique_only: bool,
     let nice_name = mesh.get_name().white();
 
     // Handle coloring the name based on type    
-    if mesh.mesh_type == MeshType::Group {
+    if mesh.mesh_type == pmf::MeshType::Group {
         name = name.blue();
-    } else if mesh.mesh_type == MeshType::Geometry {
+    } else if mesh.mesh_type == pmf::MeshType::Geometry {
         name = name.green();
     } else {
         name = name.red();
@@ -73,13 +62,8 @@ fn main() {
     let pmf_file_path = matches.value_of("file").unwrap();
     let unique_only: bool = matches.is_present("unique");
 
-    // Unpack the file to /tmp
-    let unpack_output = TempDir::new("pmftree").unwrap();
-    let unpack_output_path = &unpack_output.path().to_str().unwrap();
-    let _ = unpack_pmf(pmf_file_path, unpack_output_path).unwrap();
-
     // Read the pmf file
-    let root_mesh = read_unpacked_polymesh(unpack_output_path).unwrap();
+    let root_mesh = pmf::read_pmf(pmf_file_path).unwrap();
 
     // A list of already seen meshes for uniqueness check
     let mut seen_meshes = Vec::new();

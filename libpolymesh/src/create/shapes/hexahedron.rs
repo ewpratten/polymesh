@@ -1,6 +1,5 @@
 use crate::common::{
     PolyMesh,
-    MeshDef,
     MeshType,
     TransPolyMeshPtr,
     transform::{

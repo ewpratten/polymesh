@@ -1,16 +1,6 @@
-extern crate tempdir;
-extern crate itertools;
-
 use raylib::prelude::*;
 use clap::{App, Arg};
-use libpolymesh::{
-    read::{
-        unpack_pmf,
-        read_unpacked_polymesh
-    },
-    util::flatlist::get_flat_geometry
-};
-use tempdir::TempDir;
+use libpolymesh::prelude as pmf;
 use raylib::ffi::KeyboardKey::KEY_W;
 
 fn main() {
@@ -27,18 +17,13 @@ fn main() {
 
     let pmf_file_path = matches.value_of("file").unwrap();
 
-    // Unpack the file to /tmp
-    let unpack_output = TempDir::new("pmfview").unwrap();
-    let unpack_output_path = &unpack_output.path().to_str().unwrap();
-    let _ = unpack_pmf(pmf_file_path, unpack_output_path).unwrap();
-
     // Load the root file metadata
-    let mesh = read_unpacked_polymesh(unpack_output_path).unwrap();
+    let mesh = pmf::read_pmf(pmf_file_path).unwrap();
     let pmf_name = mesh.get_name();
     println!("Loaded PolyMesh: {}", pmf_name);
 
     // Get a flat list of all geometry that needs to be rendered
-    let flat_geometry = get_flat_geometry(mesh);
+    let flat_geometry = pmf::get_flat_geometry(mesh);
 
     // Set up GUI
     let (mut rl, thread) = raylib::init()
