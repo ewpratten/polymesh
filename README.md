@@ -1,4 +1,4 @@
-# PolyMesh
+![./screenshots/logo.png]
 
 ![Build](https://github.com/Ewpratten/polymesh/workflows/Build/badge.svg)
 

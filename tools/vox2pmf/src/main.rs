@@ -69,16 +69,16 @@ fn main() -> Result<()> {
                 let color = format!("{:x}", color);
                 let color_components = <[u8; 4]>::from_hex(color).unwrap();
                 let color = pmf::PolyColor {
-                    r: color_components[2],
-                    g: color_components[1],
-                    b: color_components[0],
-                    a: color_components[3],
+                    r: color_components[3],
+                    g: color_components[2],
+                    b: color_components[1],
+                    a: color_components[0],
                 };
 
                 // Skip transparent voxels
-                if color.a == 0 {
-                    continue;
-                }
+                // if color.a == 0 {
+                //     continue;
+                // }
 
                 // Create a cube for the voxel
                 let cube = pmf::make_hexahedron(pmf::PolyVector { x: 0.5, y: 0.5, z: 0.5 }, pmf::PolyVector { x: -0.5, y: -0.5, z: -0.5 }, color);
@@ -97,8 +97,8 @@ fn main() -> Result<()> {
                 mesh: known_voxels[&descriptor].mesh.clone(),
                 translation: Some(pmf::PolyVector {
                     x: voxel.x as f32,
-                    y: voxel.y as f32,
-                    z: voxel.z as f32,
+                    y: voxel.z as f32,
+                    z: (voxel.y as f32) * -1.0,
                 })
             })
 
