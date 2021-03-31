@@ -1,6 +1,6 @@
 ![](./screenshots/logo.png)
 
-![Build](https://github.com/Ewpratten/polymesh/workflows/Build/badge.svg)
+![Build](https://github.com/Ewpratten/polymesh/workflows/Build/badge.svg) [![crates.io](https://img.shields.io/crates/v/libpolymesh)](https://crates.io/crates/libpolymesh) [![documentation](https://docs.rs/libpolymesh/badge.svg)](https://docs.rs/libpolymesh)
 
 PolyMesh is a custom 3D object description file format I designed as an experiment. The PolyMesh file format and toolset are specifically designed for 3D rendering applications.
 
@@ -14,17 +14,17 @@ All meshes are relatively positioned. This means that the lowest level meshes sh
 
 This repository provides a few CLI tools for working with PolyMeshes:
 
- - [`pmfpack`](tools/pmfpack)
+ - [`pmfpack`](tools/pmfpack) [![crates.io](https://img.shields.io/crates/v/pmfpack)](https://crates.io/crates/pmfpack)
    - Can pack an uncompressed directory (like the `default_cube` example) into a single `.pmf` file
- - [`pmfextract`](tools/pmfextract)
+ - [`pmfextract`](tools/pmfextract) [![crates.io](https://img.shields.io/crates/v/pmfextract)](https://crates.io/crates/pmfextract)
    - Can unpack a `.pmf` file into an uncompressed directory
- - [`pmftree`](tools/pmftree)
+ - [`pmftree`](tools/pmftree) [![crates.io](https://img.shields.io/crates/v/pmftree)](https://crates.io/crates/pmftree)
    - Provides a visualization of any `.pmf` file in a style similar to the `tree` command
- - [`pmfview`](tools/pmfview)
+ - [`pmfview`](tools/pmfview) [![crates.io](https://img.shields.io/crates/v/pmfview)](https://crates.io/crates/pmfview)
    - A full 3D visualizer for any `.pmf` file. Inspired by Pixar's `usdview`. Built on [raylib](https://github.com/raysan5/raylib)
- - [`vox2pmf`](tools/vox2pmf)
+ - [`vox2pmf`](tools/vox2pmf) [![crates.io](https://img.shields.io/crates/v/vox2pmf)](https://crates.io/crates/vox2pmf)
    - A tool that can convert files from the `.vox` format to a PolyMesh
- - [`pmfcube`](tools/pmfcube)
+ - [`pmfcube`](tools/pmfcube) [![crates.io](https://img.shields.io/crates/v/pmfcube)](https://crates.io/crates/pmfcube)
    - A debugging tool that will generate a colored cube at `[0,0,0]` with the size of 1 unit
 
 ## The library
