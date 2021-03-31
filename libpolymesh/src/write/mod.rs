@@ -1,3 +1,5 @@
+//! Utilities related to writing and saving pmf files from PolyMesh data
+
 mod write;
 mod pack;
 

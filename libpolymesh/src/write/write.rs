@@ -9,7 +9,7 @@ use super::super::{
 use std::fs;
 use serde_json::Result;
 
-/// Write a PolyMesh to a root directory in "unpacked" mode
+/// Write a PolyMesh to a root directory in "unpacked" mode. This assumes that the `root_path` is an empty directory
 pub fn write_unpacked_polymesh(mesh: &PolyMesh, root_path: &str) -> Result<()> {
 
     // Create a list to keep track of already written meshes (this prevents infinite write lock)
