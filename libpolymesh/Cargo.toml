@@ -1,6 +1,6 @@
 [package]
 name = "libpolymesh"
-version = "0.1.1"
+version = "1.0.0"
 description = "The core PolyMesh library"
 readme = "../README.md"
 license-file = "../LICENSE"

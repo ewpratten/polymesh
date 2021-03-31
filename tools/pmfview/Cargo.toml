@@ -11,5 +11,5 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
 clap = "2.33.3"
-libpolymesh = { path = "../../libpolymesh", version = "" }
+libpolymesh = { path = "../../libpolymesh", version = "1" }
 raylib = "3.5.0"

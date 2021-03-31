@@ -12,5 +12,5 @@ edition = "2018"
 
 [dependencies]
 clap = "2.33.3"
-libpolymesh = { path = "../../libpolymesh", version = "" }
+libpolymesh = { path = "../../libpolymesh", version = "1" }
 colored = "2.0.0"

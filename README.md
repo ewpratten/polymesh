@@ -34,3 +34,30 @@ This repository provides a few CLI tools for working with PolyMeshes:
 ## A note on coordinates
 
 This project shouldn't actually care which coordinate system is used, but I program it using the "Y-up, right-handed" rule.
+
+## Building
+
+This monorepo has a few system dependencies:
+
+```sh
+# Install GUI libraries
+sudo apt install libasound2-dev mesa-common-dev libx11-dev libxrandr-dev libxi-dev xorg-dev libgl1-mesa-dev libglu1-mesa-dev
+
+# Install the workspace wrangling tools
+cargo install cargo-token
+cargo install cargo-unleash --version 1.0.0-alpha.11
+```
+
+Building is done with:
+
+```sh
+cargo build --all
+```
+
+### Publishing
+
+The following command is used to auto-publish the entire workspace:
+
+```sh
+cargo unleash em-dragons --token $(cargo token)
+```
